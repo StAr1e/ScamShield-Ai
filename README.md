@@ -258,4 +258,4 @@ Built with ❤️ for digital safety and fraud prevention.
 For issues, questions, or suggestions:
 - Open an issue on the repository
 
-- 
+
