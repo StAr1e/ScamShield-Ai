@@ -1,0 +1,14 @@
+# Core Dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+python-multipart==0.0.6
+
+# ML Dependencies (optional - controlled by ENABLE_ML)
+numpy==1.26.3
+scikit-learn==1.4.0
+
+# Optional: Image processing for screenshot detection
+# Uncomment if ENABLE_SCREENSHOT_DETECTION=true
+# Pillow==10.2.0
+# pytesseract==0.3.10
