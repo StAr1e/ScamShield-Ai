@@ -227,25 +227,15 @@ The application promotes these security principles:
 4. 🔗 **Check URLs** carefully before clicking any links
 5. 🗑️ **Delete suspicious** messages immediately
 
-## 🚧 Future Enhancements
-
-- 📱 Mobile app (iOS/Android)
-- 🤖 Advanced ML models (BERT/DistilBERT)
-- 🗄️ Database logging for analytics
-- 📊 Dashboard for threat trends
-- 🔌 Browser extension integration
-- 🌐 Multi-language support
-- 📧 Email integration
-- 🔔 Real-time alerts
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create a feature branch 
+3. Commit your changes
+4. Push to the branch 
 5. Open a Pull Request
 
 ## 📄 License
@@ -267,10 +257,5 @@ Built with ❤️ for digital safety and fraud prevention.
 
 For issues, questions, or suggestions:
 - Open an issue on the repository
-- Contact the development team
 
----
-
-**⚠️ Disclaimer**: ScamShield AI is an educational tool for demonstration purposes. While it can help identify common scam patterns, it should not be the sole method for determining message authenticity. Always verify suspicious communications through official channels and exercise caution with sensitive information.
-
-**Stay Safe Online! 🛡️**
+- 
