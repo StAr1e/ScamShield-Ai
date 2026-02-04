@@ -112,11 +112,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-The backend API will be available at `http://localhost:8000`
-
-- API Documentation: http://localhost:8000/docs
-- Health Check: http://localhost:8000/health
-
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
