@@ -421,3 +421,9 @@ class PerformanceMetrics:
 # Global analytics instance
 analytics = ScamAnalytics()
 performance_metrics = PerformanceMetrics()
+
+# Backwards compatibility aliases
+# Some modules (e.g., older code) import `AnalyticsTracker` from this module.
+# Provide a simple alias so those imports continue to work.
+AnalyticsTracker = ScamAnalytics
+

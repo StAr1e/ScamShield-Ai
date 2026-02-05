@@ -6,10 +6,10 @@ from datetime import datetime
 import os
 
 # Import detection engines
-from detection.ml_detector import MLDetector
+from detection.ml_detector import EnhancedMLDetector
 from detection.rule_detector import RuleDetector
 from detection.language_processor import LanguageProcessor
-from detection.screenshot_analyzer import ScreenshotAnalyzer
+from detection.screenshot_analyzer import FakeScreenshotDetector
 
 # Import analytics
 from analytics.tracker import AnalyticsTracker
@@ -96,7 +96,7 @@ class DetectionEngine:
         
         # ML detector (if enabled)
         if settings.ENABLE_ML:
-            self.ml_detector = MLDetector(
+            self.ml_detector = EnhancedMLDetector(
                 model_type=settings.ML_MODEL_TYPE,
                 model_path=settings.ML_MODEL_PATH
             )
@@ -110,7 +110,7 @@ class DetectionEngine:
         
         # Screenshot analyzer (if enabled)
         if settings.ENABLE_SCREENSHOT_DETECTION:
-            self.screenshot_analyzer = ScreenshotAnalyzer()
+            self.screenshot_analyzer = FakeScreenshotDetector()
         else:
             self.screenshot_analyzer = None
         

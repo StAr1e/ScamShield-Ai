@@ -267,36 +267,84 @@ class BehavioralPatternAnalyzer:
 class EnhancedMLDetector:
     """Enhanced ML detector with advanced features"""
     
-    def __init__(self):
+    def __init__(self, model_type: str = 'random_forest', model_path: Optional[str] = None):
+        """Initialize detector.
+
+        Args:
+            model_type: Name of the model type (informational/for future use)
+            model_path: Optional path to a pre-trained model (joblib dump)
+        """
         from sklearn.feature_extraction.text import TfidfVectorizer
         from sklearn.ensemble import RandomForestClassifier
         from sklearn.preprocessing import StandardScaler
-        
-        # TF-IDF for text features
-        self.tfidf_vectorizer = TfidfVectorizer(
-            max_features=3000,
-            ngram_range=(1, 3),
-            min_df=1,
-            max_df=0.9,
-            analyzer='word'
-        )
-        
-        # Random Forest for better accuracy
-        self.text_model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=20,
-            min_samples_split=5,
-            random_state=42,
-            class_weight='balanced'
-        )
-        
-        # Scaler for numerical features
-        self.scaler = StandardScaler()
-        
+        import os
+
+        self.model_type = model_type
+        self.model_path = model_path
+
+        # Placeholders; may be replaced by loaded model
+        self.tfidf_vectorizer = None
+        self.text_model = None
+        self.scaler = None
+
         # Feature analyzer
         self.text_analyzer = AdvancedTextAnalyzer()
         self.behavior_analyzer = BehavioralPatternAnalyzer()
-        
+
+        # Try to load a pretrained model if a path is provided
+        if model_path:
+            try:
+                import joblib
+                if os.path.exists(model_path):
+                    model_data = joblib.load(model_path)
+                    # Support both dict-based dumps and raw estimator objects
+                    if isinstance(model_data, dict):
+                        self.tfidf_vectorizer = model_data.get('tfidf_vectorizer')
+                        self.text_model = model_data.get('text_model')
+                        self.scaler = model_data.get('scaler')
+                        print(f"Loaded ML model from {model_path}")
+                    else:
+                        # Assume it's an estimator/pipeline that handles raw text
+                        self.text_model = model_data
+                        # Create a default TF-IDF if not provided
+                        self.tfidf_vectorizer = TfidfVectorizer(
+                            max_features=3000,
+                            ngram_range=(1, 3),
+                            min_df=1,
+                            max_df=0.9,
+                            analyzer='word'
+                        )
+                        self.scaler = StandardScaler()
+                        print(f"Loaded ML estimator from {model_path}")
+                else:
+                    print(f"Model path {model_path} does not exist; initializing default models")
+            except Exception as e:
+                print(f"Failed to load model from {model_path}: {e}; initializing defaults")
+
+        # If not loaded from disk, initialize default models
+        if self.tfidf_vectorizer is None or self.text_model is None or self.scaler is None:
+            # TF-IDF for text features
+            self.tfidf_vectorizer = TfidfVectorizer(
+                max_features=3000,
+                ngram_range=(1, 3),
+                min_df=1,
+                max_df=0.9,
+                analyzer='word'
+            )
+
+            # Random Forest for better accuracy
+            self.text_model = RandomForestClassifier(
+                n_estimators=100,
+                max_depth=20,
+                min_samples_split=5,
+                random_state=42,
+                class_weight='balanced'
+            )
+
+            # Scaler for numerical features
+            self.scaler = StandardScaler()
+
+        # Initialize / train lightweight example models if needed
         self._initialize_models()
     
     def _initialize_models(self):
@@ -505,4 +553,27 @@ class EnhancedMLDetector:
                 'url_risk': url_risk,
                 'template_risk': template_risk
             }
+        }
+
+    def predict(self, text: str) -> Dict:
+        """Compatibility wrapper returning expected keys for older callers.
+
+        Extracts simple URL list from text and delegates to `predict_advanced`.
+        Returns a dict with `probability` key used by `main.py`.
+        """
+        import re
+
+        # Broad URL / domain extraction
+        urls = re.findall(r'https?://\S+|www\.\S+|\b[\w.-]+\.[a-zA-Z]{2,}\b', text)
+
+        pred = self.predict_advanced(text, urls)
+        probability = pred.get('ml_probability', pred.get('probability', 0.0))
+
+        return {
+            'probability': probability,
+            'ml_probability': pred.get('ml_probability', probability),
+            'confidence': pred.get('confidence'),
+            'tfidf_score': pred.get('tfidf_score'),
+            'feature_score': pred.get('feature_score'),
+            'details': pred.get('feature_breakdown', {})
         }
